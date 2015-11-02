@@ -25,13 +25,6 @@ def connect(connect_string):
         print 'traceback.format_exc() =', traceback.format_exc()
         sys.exit()
 
-    #except Exception as instance:
-    #    print "Exception error connecting to the database"
-    #    print 'type(instance) =', type(instance)# the exception instance
-    #    print 'instance.args =', instance.args  # arguments stored in .args
-    #    print 'instance =', instance            # __str__ allows args to be...
-    #    sys.exit()                              #  ...printed directly
-
     return connection
 
 
@@ -48,10 +41,6 @@ def close_connection(connection):
     except psycopg2.Error as e:
         print 'psycopg2.Error closing connection. error =', e
         sys.exit()
-
-    #except Exception as x:
-    #    print 'Error closing connection. exception =', x
-    #    sys.exit()
 
     return True
 
@@ -77,13 +66,6 @@ def deleteMatches():
         print 'traceback.format_exc() =', traceback.format_exc()
         sys.exit()
 
-    #except Exception as instance:
-    #    print "Exception error connecting to the database"
-    #    print 'type(instance) =', type(instance)# the exception instance
-    #    print 'instance.args =', instance.args  # arguments stored in
-    #    print 'instance =', instance            #   .args__str__ allows args...
-    #    sys.exit()                              #   ...to be printed directly
-
     return True
 
 def deletePlayers():
@@ -107,13 +89,6 @@ def deletePlayers():
         print 'e.pgerror =', e.pgerror
         print 'traceback.format_exc() =', traceback.format_exc()
         sys.exit()
-
-    #except Exception as instance:
-    #    print "Exception error connecting to the database"
-    #    print 'type(instance) =', type(instance)# the exception instance
-    #    print 'instance.args =', instance.args  # arguments stored in
-    #    print 'instance =', instance            #   .args__str__ allows args...
-    #    sys.exit()                              #   ...to be printed directly
 
     return True
 
@@ -140,13 +115,6 @@ def countPlayers():
         print 'traceback.format_exc() =', traceback.format_exc()
         sys.exit()
 
-    #except Exception as instance:
-    #    print "Exception error connecting to the database"
-    #    print 'type(instance) =', type(instance)# the exception instance
-    #    print 'instance.args =', instance.args  # arguments stored in
-    #    print 'instance =', instance            #   .args__str__ allows args...
-    #    sys.exit()                              #   ...to be printed directly
-
     return count
 
 def registerPlayer(pname):
@@ -163,7 +131,10 @@ def registerPlayer(pname):
     try:
         dB_connection = connect("dbname=tournament")
         cursor = dB_connection.cursor()
-        cursor.execute("INSERT INTO players (name) VALUES('" + pname + "');")
+
+        INSERT = cursor.mogrify('''INSERT INTO players (name) VALUES(%s);''', (pname,))
+        cursor.execute(INSERT)
+
         dB_connection.commit()
         dB_connection.close()
 
@@ -173,13 +144,6 @@ def registerPlayer(pname):
         print 'e.pgerror =', e.pgerror
         print 'traceback.format_exc() =', traceback.format_exc()
         sys.exit()
-
-    #except Exception as instance:
-    #    print "Exception error connecting to the database"
-    #    print 'type(instance) =', type(instance)# the exception instance
-    #    print 'instance.args =', instance.args  # arguments stored in
-    #    print 'instance =', instance            #   .args__str__ allows args...
-    #    sys.exit()                              #   ...to be printed directly
 
     return True
 
@@ -198,58 +162,72 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     CLEAN = '''
-            DROP VIEW IF EXISTS pid_1_view;
-            DROP VIEW IF EXISTS pid_2_view;
+            DROP VIEW IF EXISTS winners;
+            DROP VIEW IF EXISTS losers;
             '''
 
-    WINS = '''
-            SELECT p.pid, p.name, count(m.win_id) as wins
-            FROM players p
-            LEFT OUTER JOIN matches m
-            ON p.pid=m.win_id
-            GROUP BY p.pid
-            ORDER BY wins;
-            '''
-    PID_1_V = '''
-                CREATE VIEW pid_1_view AS
-                SELECT p.pid, p.name, count(m.pid_1) as primary
-                FROM players as p
-                LEFT OUTER JOIN matches as m
-                ON(p.pid = m.pid_1)
-                GROUP by p.pid, p.name
-                ORDER by p.pid;
+    WINNERS = '''
+                CREATE VIEW winners AS
+                    SELECT p.pid, p.name, count(m.winner) as wins
+                    FROM players as p
+                    LEFT OUTER JOIN matches as m
+                    ON(p.pid = m.winner)
+                    GROUP by p.pid, p.name
+                    ORDER by p.pid;
              '''
-    PID_2_V = '''
-                CREATE VIEW pid_2_view AS
-                SELECT p.pid, p.name, count(m.pid_2) as secondary
-                FROM players as p
-                LEFT OUTER JOIN matches as m
-                ON(p.pid = m.pid_2)
-                GROUP BY p.pid, p.name
-                ORDER BY p.pid;
+
+    LOSERS = '''
+                CREATE VIEW losers AS
+                    SELECT p.pid, p.name, count(m.loser) as losses
+                    FROM players as p
+                    LEFT OUTER JOIN matches as m
+                    ON(p.pid = m.loser)
+                    GROUP BY p.pid, p.name
+                    ORDER BY p.pid;
               '''
 
+    WINS = '''
+            SELECT * FROM winners ORDER BY wins DESC;
+            '''
+
+    LOSSES = '''
+            SELECT * FROM losers ORDER BY losses DESC;
+            '''
+
     MATCHES = '''
-                SELECT x.pid, x.name, (x.primary + y.secondary) as matches
-                FROM pid_1_view x
-                LEFT OUTER JOIN pid_2_view y
-                ON(x.pid = y.pid)
-                ORDER BY x.pid;
+                SELECT w.pid, w.name, (w.wins + l.losses) as matches
+                FROM winners w
+                LEFT OUTER JOIN losers l
+                ON(w.pid = l.pid)
+                ORDER BY w.pid;
               '''
 
     try:
         dB_connection = connect("dbname=tournament")
         cursor = dB_connection.cursor()
-        cursor.execute(CLEAN)
-        cursor.execute(WINS)
 
+        # remove views
+        cursor.execute(CLEAN)
+
+        # create views
+        cursor.execute(WINNERS)
+        cursor.execute(LOSERS)
+
+        # use view to acquire wins
+        cursor.execute(WINS)
         wins = cursor.fetchall()
 
-        cursor.execute(PID_1_V)
-        cursor.execute(PID_2_V)
-        cursor.execute(MATCHES)
+        #print 'playerStandings(): wins    =', wins
 
+        # use view to acquire losses
+        cursor.execute(LOSSES)
+        losses = cursor.fetchall()
+        #print 'playerStandings(): losses  =', losses
+
+        # use view to calculate matches
+        cursor.execute(MATCHES)
         matches = cursor.fetchall()
+        #print 'playerStandings(): matches =', matches
 
         dB_connection.commit()
         dB_connection.close()
@@ -261,44 +239,42 @@ def playerStandings():
         print 'traceback.format_exc() =', traceback.format_exc()
         sys.exit()
 
-    # See https://docs.python.org/2/howto/sorting.html#sortinghowto for 'key' argument explanation
-    # Example: http://pythoncentral.io/how-to-sort-a-list-tuple-or-object-with-sorted-in-python/
-    #          http://stackoverflow.com/questions/613183/sort-a-python-dictionary-by-value
-    # sorted_rows: sorted on wins; reverse => most to fewest wins
+    # match[2] is the match count for pid
+    standings = [add_item_to_tuple(win, match[2])
+                    for win in wins
+                        for match in matches
+                            # win[0] and match[0] are the pid
+                            if win[0] == match[0]]
 
-    # define the item within the list for sorted() to match against
-    def getItem2(item):
-        return item[2]
-
-    sorted_wins = sorted(wins, key=getItem2, reverse=True)
-
-    #print 'sorted_wins =', sorted_wins
-    #print
-    #print 'matches =', matches
-    #for row in matches:
-    #    print row
-
-    # match[2] is the sum of matches for pid
-    comprehension_result = [add_item_to_tuple(win, match[2])
-                                for win in sorted_wins
-                                    for match in matches
-                                        if win[0] == match[0]]
-
-    #print 'comprehension_result =', comprehension_result
-    #for cr_tuple in comprehension_result:
-    #    print 'cr_tuple =', cr_tuple
-    # returns: A list of tuples, each of which contains (id, name, wins, matches)
-    return comprehension_result
+    # Return list of tuples, each of which contains (id, name, wins, matches)
+    # print 'playerStandings(): standings =', standings
+    return standings
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
-
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    pass
+    try:
+        dB_connection = connect("dbname=tournament")
+        cursor = dB_connection.cursor()
+
+        INSERT = cursor.mogrify('''INSERT INTO matches VALUES(%s,%s);''', (winner, loser))
+
+        cursor.execute(INSERT)
+        dB_connection.commit()
+        dB_connection.close()
+
+    except psycopg2.Error as e:
+        print "psycopg2.Error Can't connect to the database. e =", e
+        print 'e.pgcode =', e.pgcode
+        print 'e.pgerror =', e.pgerror
+        print 'traceback.format_exc() =', traceback.format_exc()
+        sys.exit()
  
+    return
+
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
   
@@ -314,22 +290,105 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-    pass
+    standings = playerStandings()
+    print 'swissPairings(): standings =', standings
+
+    # input to this algorithm is player info: (pid, name, wins, matches)
+    pairing = []
+    pair = ()
+    # enumerate standings to get an index into players
+    for (number, player) in enumerate(standings):
+        print "number =", number, " player =", player
+        # extract pid, name from player
+        for index in range(0,1,1):
+            identifier = player[index], player[index + 1]
+            print "identifier =", identifier
+        # create a pair of adjacent players
+        pair += identifier
+        print 'pair = ', pair
+
+        # capture a single pair then reset pair on odd nubered players
+        if number % 2 != 0:
+            pairing.append(pair)
+            pair = ()
+
+    print 'pairing =', pairing
+    return pairing
+
 
 def add_item_to_tuple(input_tuple, item):
-    '''add_item_to_tuple(): append item to result_tuple
+    '''add_item_to_tuple(): append item to input_tuple
        args: input_tuple - tuple that you want to append data to
              item - data to be appended
-       return: result tuple
+       return: input_tuple + (item,)
     '''
-    result_tuple = input_tuple
-    result_tuple = result_tuple + (item,)
-    #print 'add_item_to_tuple(): result_tuple =', result_tuple
-    return (result_tuple)
+    return input_tuple + (item,)
+
+def DumpTables():
+    ''' DumpTables(): print contents of database tables
+        Args: None
+    '''
+    PLAYERS = '''
+                SELECT p.pid, p.name
+                FROM players p
+                ORDER BY p.pid;
+              '''
+
+    MATCHES = '''
+                SELECT m.winner W, m.loser L
+                FROM players p
+                LEFT OUTER JOIN matches m
+                ON(p.pid = m.winner);
+              '''
+    try:
+        dB_connection = connect("dbname=tournament")
+        cursor = dB_connection.cursor()
+
+        cursor.execute(MATCHES)
+        dump_matches = cursor.fetchall()
+
+        cursor.execute(PLAYERS)
+        dump_players = cursor.fetchall()
+
+        dB_connection.commit()
+        dB_connection.close()
+
+    except psycopg2.Error as e:
+        print "psycopg2.Error Can't connect to the database. e =", e
+        print 'e.pgcode =', e.pgcode
+        print 'e.pgerror =', e.pgerror
+        print 'traceback.format_exc() =', traceback.format_exc()
+        sys.exit()
+
+    print 'DumpTables(): dump_players =', dump_players
+    print 'DumpTables(): dump_matches =', dump_matches
+
+    return
+
 
 if __name__ == '__main__':
-    print('Starting tournament.py. Connecting to database...')
-    dB_connection = connect()
-    print 'Successful dB connection.  connect_status =', dB_connection
-    close_connection(dB_connection)
+
+    #registerPlayer("Twilight Sparkle")
+    #registerPlayer("Fluttershy")
+    #registerPlayer("Applejack")
+    #registerPlayer("Pinkie Pie")
+
+    standings = playerStandings()
+    print 'script(): standings =', standings
+
+    #winner, loser = 0, 0
+    #
+    #for (index, row) in enumerate(standings):
+    #    print 'index, row =', index, ' ', row
+    #    if index == 3:
+    #        winner = row[0]
+    #    if index == 4:
+    #        loser = row[0]
+    #
+    #print 'winner =', winner
+    #print 'loser  =', loser
+
+    DumpTables()
+    #reportMatch(winner, loser)
+    #DumpTables()
 
