@@ -148,6 +148,9 @@ def testPairings():
 
     print "8. After one match, players with one win are paired."
 
+def testDumpTables():
+    DumpTables()
+
 
 if __name__ == '__main__':
     testDeleteMatches()
@@ -156,8 +159,8 @@ if __name__ == '__main__':
     testRegister()
     testRegisterCountDelete()
     testStandingsBeforeMatches()
-    #testReportMatches()
-    #testPairings()
+    testReportMatches()
+    testPairings()
     print "Success!  All tests pass!"
 
 

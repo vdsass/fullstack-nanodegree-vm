@@ -1,4 +1,4 @@
--- Table definitions for the tournament project.
+-- Database and table definitions for the Tournament project.
 --
 -- Put your SQL 'create table' statements in this file; also 'create view'
 -- statements if you choose to use it.
@@ -11,60 +11,48 @@ DROP DATABASE IF EXISTS tournament;
 CREATE DATABASE tournament;
 \c tournament;
 
--- drop tables - because of FK, order is important
-DROP TABLE IF EXISTS matches;
-DROP TABLE IF EXISTS players;
+-- drop tables - because of foreign keys, order is important
+DROP TABLE IF EXISTS matches CASCADE;
+DROP TABLE IF EXISTS players CASCADE;
+DROP TABLE IF EXISTS tournaments CASCADE;
 
 -- create tables
+CREATE TABLE IF NOT exists tournaments(
+    tid serial PRIMARY KEY, -- tournament id
+    tname text              -- tournament name
+);
+ALTER SEQUENCE tournaments_tid_seq RESTART WITH 100;
+INSERT INTO tournaments (tname) values('Default Tournament');
+INSERT INTO tournaments (tname) values('San Diego Western Regionals');
+INSERT INTO tournaments (tname) values('Las Vegas Finals');
+INSERT INTO tournaments (tname) values('Kansas City Midwestern');
+INSERT INTO tournaments (tname) values('New York Eastern Championships');
+INSERT INTO tournaments (tname) values('Seattle NorthPac');
+
 
 CREATE TABLE IF NOT exists players(
-                                    pid serial primary key,
-                                    name text
-                                   );
-INSERT INTO players (pid, name) values(0,'Nobody');
-INSERT INTO players (name) values('Billy Bob Thorton');
-INSERT INTO players (name) values('Christian Bale');
-INSERT INTO players (name) values('Johnny Depp');
-INSERT INTO players (name) values('Brad Pitt');
-INSERT INTO players (name) values('Jon Ham');
-
-/*
-CREATE TABLE IF NOT exists matches (
-    pid_1 integer REFERENCES players (pid),
-    pid_2 integer REFERENCES players (pid),
-    win_id integer REFERENCES players (pid)
+    tid integer REFERENCES tournaments (tid), -- tournament id
+    pid serial primary key,                   -- player id
+    name text
 );
---   MATCHES
--- 1 2 3 4 5  W
--- x x        2
--- x   x      1
--- x     x    4
---   x x      2
---   x   x    4
---     x x    4
---         X
--- INSERT INTO matches(pid_1, pid_2, win_id) values();
-INSERT INTO matches (pid_1, pid_2, win_id) VALUES
-    (0, 0, 0),
-    (1, 2, 2),
-    (1, 3, 1),
-    (1, 4, 4),
-    (2, 3, 2),
-    (2, 4, 4),
-    (3, 4, 4),
-    (4, 0, 0),
-    (5, 0, 0);
-*/
+
+INSERT INTO players (tid, name) values(102, 'Billy Bob Thornton');
+INSERT INTO players (tid, name) values(102, 'Christian Bale');
+INSERT INTO players (tid, name) values(102, 'Johnny Depp');
+INSERT INTO players (tid, name) values(102, 'Brad Pitt');
+
 
 CREATE TABLE IF NOT exists matches (
+    tid integer REFERENCES tournaments (tid),
     winner integer REFERENCES players (pid),
     loser integer REFERENCES players (pid)
 );
 
-INSERT INTO matches (winner, loser) values(1,5);
-INSERT INTO matches (winner, loser) values(4,2);
-INSERT INTO matches (winner, loser) values(2,1);
-INSERT INTO matches (winner, loser) values(5,4);
-INSERT INTO matches (winner, loser) values(5,2);
-INSERT INTO matches (winner, loser) values(5,1);
-
+/*
+INSERT INTO matches (tid, winner, loser) values(102,1,5);
+INSERT INTO matches (tid, winner, loser) values(102,4,2);
+INSERT INTO matches (tid, winner, loser) values(102,2,1);
+INSERT INTO matches (tid, winner, loser) values(102,5,4);
+INSERT INTO matches (tid, winner, loser) values(102,5,2);
+INSERT INTO matches (tid, winner, loser) values(102,5,1);
+*/
