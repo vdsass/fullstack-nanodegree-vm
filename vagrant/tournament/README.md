@@ -290,7 +290,6 @@ To run the Tournament Manager application perform the following steps:
             Type the player's full name: Kevin Bacon
                                PLAYERS
              TID   PID                 NAME
-            ---------------------------------------------
              102    1   Billy Bob Thornton
              102    2   Christian Bale
              102    3   Johnny Depp
