@@ -88,7 +88,7 @@ def connect(connect_string):
 
     return connection
 
-def countPlayers():
+def countPlayers(tid=100):
     """
     countPlayers(): returns the number of players currently registered.
 
@@ -100,7 +100,9 @@ def countPlayers():
         dB_connection = connect("dbname=tournament")
         cursor = dB_connection.cursor()
 
-        cursor.execute("select count(*) from players;")
+        cursor.execute('''SELECT count(*) FROM players
+                          WHERE (tid = %s);''', (tid,))
+
         count = cursor.fetchone()
         if type(count) is tuple:
             count = count[0]
@@ -300,13 +302,8 @@ def playerStandings(tid=100):
                     (w.tid = %s and l.tid = %s))
                 ORDER BY w.pid;''', (tid,tid))
 
-        #print 'MATCHES =', MATCHES
-
         cursor.execute(MATCHES)
         matches = cursor.fetchall()
-        #print 'matches =', matches
-
-        #dB_connection.commit() # is this commit required?
         dB_connection.close()
 
     except psycopg2.Error as e:
@@ -325,9 +322,11 @@ def playerStandings(tid=100):
             match_tid,match_pid,match_sum = (match[0],
                                              match[1],
                                              int(0 if match[3] is None else match[3]))
+
             # compare tournament id and player id; build the list
-            if win_tid == match_tid and win_pid == match_pid:
-                standings.append((win_pid, win_name, win_wins, match_sum))
+            if match_tid == tid:
+                if win_tid == match_tid and win_pid == match_pid:
+                    standings.append((win_pid, win_name, win_wins, match_sum))
     return standings
 
 def registerPlayer(pname, tid=100):

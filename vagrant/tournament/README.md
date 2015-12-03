@@ -130,11 +130,13 @@ project files have been downloaded (i.e., in Windows:
 
             psql (9.3.9)
             Type "help" for help.
-            vagrant=>
+            User=#
 
-    1. Initialize the database:
+    **Note:** The default database is named 'User.'
 
-        vagrant=> **\i tournament.sql**
+    1. Initialize the tournament database:
+
+        User=# **\i tournament.sql**
 
         The response should look like:
 
@@ -218,10 +220,9 @@ To run the Tournament Manager application perform the following steps:
 
             Press Enter to continue:
 
-    **NOTE**: You can initialize the database with tournaments and players by running tournament.sql within the psql application:
+    **NOTE**: You can initialize the database with tournaments and players by running tournament.sql from the psql application:
 
-        vagrant=> **\i tournament.sql**
-
+        User=# **\i tournament.sql**
 
 1.  Menu item 2, Select Tournament, establishes the 'current' tournament
     for other commands to use. The function lists the defined Tournaments
@@ -304,149 +305,149 @@ To run the Tournament Manager application perform the following steps:
    played. For a Tournament that has not recorded any matches, Player
    Standings look like this:
 
-                                                PLAYER STANDINGS
-                                                 Round:   1
-                --------------------------------------------------------------------------------
-                 PID                       NAME                       WINS   MATCHES
-                --------------------------------------------------------------------------------
-                  1   Billy Bob Thornton                                0       0
-                  2   Christian Bale                                    0       0
-                  3   Johnny Depp                                       0       0
-                  4   Brad Pitt                                         0       0
-                  5   Jon Hamm                                          0       0
-                  6   Kevin Bacon                                       0       0
-                ================================================================================
+                TOURNAMENT MANAGER
 
-                Press Enter to continue:
+       Current Tournament PID  : 102
+       Current Tournament Title: Las Vegas Finals
 
-    There are no Wins or Matches shown until 'Update Matches' has been
+       1. Display Tournament List
+       2. Select Tournament
+       3. Add Tournament
+       4. Display Player List
+       5. Add Player
+       6. Display Tournament Standings
+       7. Display Next Round Pairing
+       8. Update Match
+       9. Quit
+
+       >>> 6
+
+       ================================================================================
+                                       PLAYER STANDINGS
+                                   Tournament: 102
+                                        Round:   1
+       --------------------------------------------------------------------------------
+        PID                       NAME                       WINS   MATCHES
+       --------------------------------------------------------------------------------
+         1   Billy Bob Thornton                                0       0
+         2   Christian Bale                                    0       0
+         3   Johnny Depp                                       0       0
+         4   Brad Pitt                                         0       0
+       ================================================================================
+
+       Press Enter to continue:
+
+    a. There are no Wins or Matches shown until 'Update Matches' has been
     executed. The following display shows Tournament Standings Status after
     an update after one round of play. Note that round 2 is indicated.
 
-                        TOURNAMENT MANAGER
+                TOURNAMENT MANAGER
 
-               Current Tournament PID  : 102
-               Current Tournament Title: Las Vegas Finals
+        Current Tournament PID  : 102
+        Current Tournament Title: Las Vegas Finals
 
-               1. Show Tournaments
-               2. Select Tournament
-               3. New Tournament
-               4. Show Players
-               5. Add Player
-               6. Display Tournament Standings
-               7. Show Next Round Pairing
-               8. Update Match
-               9. Quit
+        1. Display Tournament List
+        2. Select Tournament
+        3. Add Tournament
+        4. Display Player List
+        5. Add Player
+        6. Display Tournament Standings
+        7. Display Next Round Pairing
+        8. Update Match
+        9. Quit
 
-               >>> 6
+        >>> 6
 
-               ================================================================================
-                                               PLAYER STANDINGS
-                                                Round:   2
-               --------------------------------------------------------------------------------
-                PID                       NAME                       WINS   MATCHES
-               --------------------------------------------------------------------------------
-                 1   Billy Bob Thornton                                1       1
-                 3   Johnny Depp                                       1       1
-                 2   Christian Bale                                    0       1
-                 4   Brad Pitt                                         0       1
-               ================================================================================
+        ================================================================================
+                                       PLAYER STANDINGS
+                                   Tournament: 102
+                                        Round:   2
+        --------------------------------------------------------------------------------
+        PID                       NAME                       WINS   MATCHES
+        --------------------------------------------------------------------------------
+         1   Billy Bob Thornton                                1       1
+         4   Brad Pitt                                         1       1
+         2   Christian Bale                                    0       1
+         3   Johnny Depp                                       0       1
+        ================================================================================
 
-               Press Enter to continue:
+        Press Enter to continue:
 
 1. Menu item 7, Show Next Round Pairing, for the current Tournament
    displays the pairs of players matched in the current round, or the next
    round if all player matches in the current round have been updated.
 
-    A first round pairing for 4 players looks like this:
+    A second round pairing for 4 players looks like this:
 
-               >>> 7
+                TOURNAMENT MANAGER
 
-               ================================================================================
-                                                PLAYER PAIRING
-                                                Round:   1
-                                           Pairing by:  adjacent PID's
-               --------------------------------------------------------------------------------
-                 PLAYER 1             NAME                    PLAYER 2             NAME
-                   PID                                         PID
-               --------------------------------------------------------------------------------
-                    1      Billy Bob Thornton          vs.       2      Christian Bale
-                    3      Johnny Depp                 vs.       4      Brad Pitt
-               ================================================================================
+       Current Tournament PID  : 102
+       Current Tournament Title: Las Vegas Finals
 
-               Press Enter to continue:
+       1. Display Tournament List
+       2. Select Tournament
+       3. Add Tournament
+       4. Display Player List
+       5. Add Player
+       6. Display Tournament Standings
+       7. Display Next Round Pairing
+       8. Update Match
+       9. Quit
 
-    After the first round update, match status looks like:
+       >>> 7
 
-                            TOURNAMENT MANAGER
+       ================================================================================
+                                        PLAYER PAIRING
+                                   Tournament: 102
+                                        Round:   2
+                                   Pairing by:  adjacent PID's
+       --------------------------------------------------------------------------------
+         PLAYER 1             NAME                    PLAYER 2             NAME
+           PID                                         PID
+       --------------------------------------------------------------------------------
+            1      Billy Bob Thornton          vs.       4      Brad Pitt
+            2      Christian Bale              vs.       3      Johnny Depp
+       ================================================================================
 
-                   Current Tournament PID  : 102
-                   Current Tournament Title: Las Vegas Finals
-
-                   1. Show Tournaments
-                   2. Select Tournament
-                   3. New Tournament
-                   4. Show Players
-                   5. Add Player
-                   6. Display Tournament Standings
-                   7. Show Next Round Pairing
-                   8. Update Match
-                   9. Quit
-
-                   >>> 7
-
-                   ================================================================================
-                                                    PLAYER PAIRING
-                                                    Round:   2
-                                               Pairing by:  adjacent PID's
-                   --------------------------------------------------------------------------------
-                     PLAYER 1             NAME                    PLAYER 2             NAME
-                       PID                                         PID
-                   --------------------------------------------------------------------------------
-                        1      Billy Bob Thornton          vs.       3      Johnny Depp
-                        2      Christian Bale              vs.       4      Brad Pitt
-                   ================================================================================
-
-                   Press Enter to continue:
+       Press Enter to continue:
 
 1. Menu item 8, Update Match, for the current Tournament allows the user to
    update win/loss information for each matched player pair.
 
-                    TOURNAMENT MANAGER
+                TOURNAMENT MANAGER
 
-           Current Tournament PID  : 102
-           Current Tournament Title: Las Vegas Finals
+       Current Tournament PID  : 102
+       Current Tournament Title: Las Vegas Finals
 
-           1. Display Tournament List
-           2. Select Tournament
-           3. Add Tournament
-           4. Display Player List
-           5. Add Player
-           6. Display Tournament Standings
-           7. Display Next Round Pairing
-           8. Update Match
-           9. Quit
+       1. Display Tournament List
+       2. Select Tournament
+       3. Add Tournament
+       4. Display Player List
+       5. Add Player
+       6. Display Tournament Standings
+       7. Display Next Round Pairing
+       8. Update Match
+       9. Quit
 
-           >>> 8
+       >>> 8
 
-           ================================================================================
-                                            PLAYER PAIRING
-                                            Round:   2
-                                       Pairing by:  adjacent PID's
-           --------------------------------------------------------------------------------
-             PLAYER 1             NAME                    PLAYER 2             NAME
-               PID                                         PID
-           --------------------------------------------------------------------------------
-                2      Christian Bale              vs.       3      Johnny Depp
-                6      Kevin Bacon                 vs.       1      Billy Bob Thornton
-                4      Brad Pitt                   vs.       5      Jon Hamm
-           ================================================================================
+       ================================================================================
+                                        PLAYER PAIRING
+                                   Tournament: 102
+                                        Round:   3
+                                   Pairing by:  adjacent PID's
+       --------------------------------------------------------------------------------
+         PLAYER 1             NAME                    PLAYER 2             NAME
+           PID                                         PID
+       --------------------------------------------------------------------------------
+            1      Billy Bob Thornton          vs.       2      Christian Bale
+            4      Brad Pitt                   vs.       3      Johnny Depp
+       ================================================================================
 
-           Type the winner's PID, 2 vs. 3, and press Enter: 3
+       Type the winner's PID, 1 vs. 2, and press Enter: 2
 
-           Type the winner's PID, 6 vs. 1, and press Enter: 6
+       Type the winner's PID, 4 vs. 3, and press Enter: 4
 
-           Type the winner's PID, 4 vs. 5, and press Enter: 5
 
 1. Menu item 9, Quit, exits Tournament Manager and returns to the prompt of
    the host operating system.

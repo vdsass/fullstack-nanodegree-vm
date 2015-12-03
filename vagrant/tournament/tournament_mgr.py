@@ -249,20 +249,20 @@ def add_player(name=None):
 
     Return: None - returns to main menu
     '''
-    current_tid = getTid()
+    tid = getTid()
 
-    if current_tid < 100:
+    if tid < 100:
         print 'Please "Select Tournament" from the main menu.'
         queryEnter()
         return
 
-    print '''This Tournament only supports even numbers of players. This function will help you add two players at a time.'''.format()
+    print '''Tournament Manager supports an even numbers of players. This function will help you add two players at a time.'''.format()
 
     while True:
         # the name must be alphabetic characters only
         pname = verify_name()
-        tour.registerPlayer(pname, current_tid)
-        if tour.countPlayers() % 2 != 0:
+        tour.registerPlayer(pname, tid)
+        if tour.countPlayers(tid) % 2 != 0:
             continue
         else:
             break
@@ -296,7 +296,7 @@ def getRound(tid=100):
 
     Return: Tournament round, Boolean for last round complete, Tournament next round
     '''
-    playerCount = tour.countPlayers()
+    playerCount = tour.countPlayers(tid)
 
     # number of rounds in Swiss Pairing is based on number of players
     # need calculatedRounds to know when Tournament is finished
@@ -310,7 +310,6 @@ def getRound(tid=100):
 
     matchesPlayed = sumMatches / 2
     sumMatches_div_playerCount = sumMatches / playerCount
-
     current_round = sumMatches_div_playerCount + 1
     next_round = current_round + 1
 
@@ -398,6 +397,7 @@ def display_standings():
 
     print '='*80
     print '''{:^80}'''.format('PLAYER STANDINGS')
+    print '''{:>39} {:>3d}'''.format('Tournament:', tid)
     print '''{:>39} {:>3d}'''.format('Round:', current_round)
     print '-'*80
     print '''{:^5}  {:^45}  {:^5}  {:^5}'''.format('PID','NAME','WINS','MATCHES')
@@ -435,6 +435,7 @@ def display_pairings(pause=True):
 
     print '='*80
     print '''{:^80}'''.format('PLAYER PAIRING')
+    print '''{:>39} {:>3d}'''.format('Tournament:', tid)
     print '''{:>39} {:>3d}'''.format('Round:', current_round)
     if current_round == 1:
         text = 'adjacent PID\'s'
