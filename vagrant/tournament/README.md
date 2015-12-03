@@ -303,20 +303,18 @@ To run the Tournament Manager application perform the following steps:
 1. Menu item 6, Display Tournament Standings, for each player in the
    current Tournament displays the number of wins and the number of matches
    played. For a Tournament that has not recorded any matches, Player
-   Standings look like this:
+   Standings look similar to this:
 
-       ================================================================================
                                        PLAYER STANDINGS
                                    Tournament: 102
                                         Round:   1
-       --------------------------------------------------------------------------------
+
         PID                       NAME                       WINS   MATCHES
-       --------------------------------------------------------------------------------
+
          1   Billy Bob Thornton                                0       0
          2   Christian Bale                                    0       0
          3   Johnny Depp                                       0       0
          4   Brad Pitt                                         0       0
-       ================================================================================
 
        Press Enter to continue:
 
@@ -324,18 +322,16 @@ To run the Tournament Manager application perform the following steps:
     executed. The following display shows Tournament Standings Status after
     an update after one round of play. Note that round 2 is indicated.
 
-        ================================================================================
                                        PLAYER STANDINGS
                                    Tournament: 102
                                         Round:   2
-        --------------------------------------------------------------------------------
+
         PID                       NAME                       WINS   MATCHES
-        --------------------------------------------------------------------------------
+
          1   Billy Bob Thornton                                1       1
          4   Brad Pitt                                         1       1
          2   Christian Bale                                    0       1
          3   Johnny Depp                                       0       1
-        ================================================================================
 
         Press Enter to continue:
 
@@ -344,36 +340,33 @@ To run the Tournament Manager application perform the following steps:
    round if all player matches in the current round have been updated. A
    second round pairing for 4 players looks like this:
 
-       ================================================================================
                                         PLAYER PAIRING
                                    Tournament: 102
                                         Round:   2
                                    Pairing by:  adjacent PID's
-       --------------------------------------------------------------------------------
+
          PLAYER 1             NAME                    PLAYER 2             NAME
            PID                                         PID
-       --------------------------------------------------------------------------------
+
             1      Billy Bob Thornton          vs.       4      Brad Pitt
             2      Christian Bale              vs.       3      Johnny Depp
-       ================================================================================
 
        Press Enter to continue:
 
 1. Menu item 8, Update Match, for the current Tournament allows the user to
    update win/loss information for each matched player pair.
 
-       ================================================================================
                                         PLAYER PAIRING
                                    Tournament: 102
                                         Round:   3
                                    Pairing by:  adjacent PID's
-       --------------------------------------------------------------------------------
+
          PLAYER 1             NAME                    PLAYER 2             NAME
            PID                                         PID
-       --------------------------------------------------------------------------------
+
             1      Billy Bob Thornton          vs.       2      Christian Bale
             4      Brad Pitt                   vs.       3      Johnny Depp
-       ================================================================================
+
 
        Type the winner's PID, 1 vs. 2, and press Enter: 2
 
