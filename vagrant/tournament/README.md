@@ -305,23 +305,6 @@ To run the Tournament Manager application perform the following steps:
    played. For a Tournament that has not recorded any matches, Player
    Standings look like this:
 
-                TOURNAMENT MANAGER
-
-       Current Tournament PID  : 102
-       Current Tournament Title: Las Vegas Finals
-
-       1. Display Tournament List
-       2. Select Tournament
-       3. Add Tournament
-       4. Display Player List
-       5. Add Player
-       6. Display Tournament Standings
-       7. Display Next Round Pairing
-       8. Update Match
-       9. Quit
-
-       >>> 6
-
        ================================================================================
                                        PLAYER STANDINGS
                                    Tournament: 102
@@ -341,23 +324,6 @@ To run the Tournament Manager application perform the following steps:
     executed. The following display shows Tournament Standings Status after
     an update after one round of play. Note that round 2 is indicated.
 
-                TOURNAMENT MANAGER
-
-        Current Tournament PID  : 102
-        Current Tournament Title: Las Vegas Finals
-
-        1. Display Tournament List
-        2. Select Tournament
-        3. Add Tournament
-        4. Display Player List
-        5. Add Player
-        6. Display Tournament Standings
-        7. Display Next Round Pairing
-        8. Update Match
-        9. Quit
-
-        >>> 6
-
         ================================================================================
                                        PLAYER STANDINGS
                                    Tournament: 102
@@ -375,26 +341,8 @@ To run the Tournament Manager application perform the following steps:
 
 1. Menu item 7, Show Next Round Pairing, for the current Tournament
    displays the pairs of players matched in the current round, or the next
-   round if all player matches in the current round have been updated.
-
-    A second round pairing for 4 players looks like this:
-
-                TOURNAMENT MANAGER
-
-       Current Tournament PID  : 102
-       Current Tournament Title: Las Vegas Finals
-
-       1. Display Tournament List
-       2. Select Tournament
-       3. Add Tournament
-       4. Display Player List
-       5. Add Player
-       6. Display Tournament Standings
-       7. Display Next Round Pairing
-       8. Update Match
-       9. Quit
-
-       >>> 7
+   round if all player matches in the current round have been updated. A
+   second round pairing for 4 players looks like this:
 
        ================================================================================
                                         PLAYER PAIRING
@@ -413,23 +361,6 @@ To run the Tournament Manager application perform the following steps:
 
 1. Menu item 8, Update Match, for the current Tournament allows the user to
    update win/loss information for each matched player pair.
-
-                TOURNAMENT MANAGER
-
-       Current Tournament PID  : 102
-       Current Tournament Title: Las Vegas Finals
-
-       1. Display Tournament List
-       2. Select Tournament
-       3. Add Tournament
-       4. Display Player List
-       5. Add Player
-       6. Display Tournament Standings
-       7. Display Next Round Pairing
-       8. Update Match
-       9. Quit
-
-       >>> 8
 
        ================================================================================
                                         PLAYER PAIRING
