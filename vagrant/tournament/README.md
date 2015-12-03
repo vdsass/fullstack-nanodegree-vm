@@ -3,8 +3,8 @@
 #Introduction
 
 This is the markdown file that describes setup and use of the Tournament
-project that runs under a Vagrant virtual machine (VM) prescribed by the
-Udacity Project Guide. This description assumes you have Python 2 and
+project that runs under a Vagrant virtual machine (VM) described by the
+Udacity Project Guide. This description assumes you have Git, Git Bash, Vagrant, Python 2, and
 PostgreSQL installed on the local machine.
 
 1. On the local machine navigate to the directory where the tournament
@@ -222,7 +222,7 @@ To run the Tournament Manager application perform the following steps:
 
     **NOTE**: You can initialize the database with tournaments and players by running tournament.sql from the psql application:
 
-        User=# **\i tournament.sql**
+    User=# **\i tournament.sql**
 
 1.  Menu item 2, Select Tournament, establishes the 'current' tournament
     for other commands to use. The function lists the defined Tournaments
