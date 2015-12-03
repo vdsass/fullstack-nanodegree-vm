@@ -46,7 +46,7 @@ project files have been downloaded (i.e., in Windows:
 
     **$ vagrant up**
 
-    The stdout display shoud be similar to this:
+    The stdout display should be similar to this:
 
         Bringing machine 'default' up with 'virtualbox' provider...
         --- default: Checking if box 'ubuntu/trusty32' is up to date...
@@ -79,7 +79,7 @@ project files have been downloaded (i.e., in Windows:
 
     **$ vagrant ssh**
 
-    The stdout display shoud be similar to this:
+    The stdout display should be similar to this:
 
         Welcome to Ubuntu 14.04.3 LTS (GNU/Linux 3.13.0-65-generic i686)
 
@@ -123,7 +123,7 @@ project files have been downloaded (i.e., in Windows:
     data for Tournaments, Players, and Matches, tournament_test.py will
     delete any Tournament information that has been entered.
 
-1. You are now able to use the Tournament Manager application. If you want to initialize the database with a set of tournaments and players perform the following steps. If you do not want to initialize the databasse, skip to 'Using Tournament Manager.'
+1. You are now able to use the Tournament Manager application. If you want to initialize the database with a set of tournaments and players perform the following steps. If you do not want to initialize the database, skip to 'Using Tournament Manager.'
 
     1. Run the PostgreSql application:
         vagrant@vagrant-ubuntu-trusty-32:/vagrant/tournament$ **psql**
@@ -177,7 +177,7 @@ To run the Tournament Manager application perform the following steps:
 
     Tournament Manager will display an ASCII menu permitting a user to view
     and update the Tournament database. At the prompt, type the menu number
-    to access the corresponding funtionality listed in the menu. The
+    to access the corresponding functionality listed in the menu. The
     currently selected Tournament ID and name will be displayed below
     the application's title.
 
@@ -218,7 +218,7 @@ To run the Tournament Manager application perform the following steps:
 
             Press Enter to continue:
 
-    **NOTE**: You can initialize the dababase with tournaments and players by running tournament.sql within the psql application:
+    **NOTE**: You can initialize the database with tournaments and players by running tournament.sql within the psql application:
 
         vagrant=> **\i tournament.sql**
 
@@ -254,7 +254,7 @@ To run the Tournament Manager application perform the following steps:
         8. Update Match
         9. Quit
 
-1.  Menu item 3, New Tournament, creates additional Tounaments. A user
+1.  Menu item 3, New Tournament, creates additional Tournaments. A user
     types the name and the database creates a Tournament ID.
 
              TOURNAMENTS
